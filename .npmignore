@@ -1,0 +1,12 @@
+.git
+.vscode
+.github
+.npmrc
+.todo
+.eslint*
+
+screenshots
+
+babel.config.js
+
+src

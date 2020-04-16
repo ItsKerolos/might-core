@@ -1,0 +1,10 @@
+Performance Issues and Bugs:
+
+Documentation:
+
+Map: 
+  ☐ allow controlling the viewport (landscape/portrait) (touch controls)
+  
+Runner:
+  ☐ research allowing people to use might with jest
+     maybe make runner use functions like screenshot, compare doStep()?

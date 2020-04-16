@@ -1,0 +1,47 @@
+{
+  "name": "might-core",
+  "version": "0.1.0",
+  "description": "A set of utilities for end-to-end testing",
+  "main": "build/index.js",
+  "scripts": {
+    "prepare": "npm run build",
+    "postpublish": "npm version patch --no-git",
+    "build": "rm -rf ./build && mkdir ./build && babel -d ./build ./src",
+    "watch": "rm -rf ./build && mkdir ./build && babel -d ./build src -s --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ItsKerolos/might-core.git"
+  },
+  "author": "Kerolos Zaki",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ItsKerolos/might-core/issues"
+  },
+  "homepage": "https://github.com/ItsKerolos/might-core#readme",
+  "keywords": [
+    "test",
+    "testing",
+    "ui",
+    "ui-testing",
+    "end-to-end-test",
+    "end-to-end-test-automation",
+    "end-to-end-testing"
+  ],
+  "dependencies": {
+    "@babel/runtime": "^7.9.2",
+    "fs-extra": "^9.0.0",
+    "pixelmatch": "^5.1.0",
+    "pngjs": "^5.0.0",
+    "puppeteer": "^2.1.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/plugin-transform-runtime": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-security": "^1.4.0"
+  }
+}
