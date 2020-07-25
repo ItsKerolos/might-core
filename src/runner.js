@@ -1,6 +1,6 @@
-import puppeteer from 'puppeteer';
-
 import { PNG } from 'pngjs';
+
+import puppeteer from 'puppeteer';
 
 import pixelmatch from 'pixelmatch';
 
@@ -12,20 +12,12 @@ import { stepsToString, wait } from './utils.js';
 
 /**
 * @typedef { Test[] } Map
-* @property { string } title
-* @property { Step[] } steps
 */
 
 /**
 * @typedef { object } Test
 * @property { string } title
-* @property { Step[] } steps
-*/
-
-/**
-* @typedef { object } Step
-* @property { 'wait' | 'select' | 'click' | 'type' } action
-* @property { any } value
+* @property { import('./utils.js').Step[] } steps
 */
 
 class MismatchError extends Error
@@ -113,6 +105,9 @@ export async function runner(options, callback)
   // launch puppeteer
   const browser = await puppeteer.launch({
     timeout: options.stepTimeout,
+    // TODO allow controlling the viewport
+    // map's default should be set here while
+    // every test can have its own viewport
     defaultViewport: { width: 1366, height: 768 },
     args: [ '--no-sandbox', '--disable-setuid-sandbox' ]
   });
@@ -126,6 +121,41 @@ export async function runner(options, callback)
     const title = t.title || stepsToString(t.steps);
 
     let selector;
+
+    /**
+    * @param { puppeteer.Page } page
+    * @param { import('./utils.js').Step } step
+    */
+    const runStep = async(page, step) =>
+    {
+      if (step.action === 'wait')
+      {
+        // wait a duration of time
+        if (typeof step.value === 'number')
+          await wait(step.value);
+        // wait for a selector
+        else
+          await page.waitForSelector(step.value, {
+            timeout: options.stepTimeout
+          });
+      }
+      else if  (step.action === 'select')
+      {
+        selector = step.value;
+      }
+      else if (step.action === 'hover')
+      {
+        await page.hover(selector);
+      }
+      else if (step.action === 'click')
+      {
+        await page.click(selector);
+      }
+      else if (step.action === 'type')
+      {
+        await page.type(selector, step.value);
+      }
+    };
 
     try
     {
@@ -150,25 +180,10 @@ export async function runner(options, callback)
         timeout: 60000
       });
   
-      // follow the steps
-      for (const s of t.steps)
+      // run the steps
+      for (const step of t.steps)
       {
-        if (s.action === 'wait')
-        {
-          await wait(s.value);
-        }
-        else if  (s.action === 'select')
-        {
-          selector = s.value;
-        }
-        else if (s.action === 'click')
-        {
-          await page.click(selector);
-        }
-        else if (s.action === 'type')
-        {
-          await page.type(selector, s.value);
-        }
+        await runStep(page, step);
       }
   
       // all steps were executed
@@ -178,9 +193,10 @@ export async function runner(options, callback)
   
       const screenshotExists = await pathExists(screenshotPath);
   
-      // update the stored screenshot
+      // new first-run test or a forced update command
       if (!screenshotExists || options.update)
       {
+        // save screenshot to disk
         await page.screenshot({
           path: screenshotPath
         });
@@ -194,13 +210,17 @@ export async function runner(options, callback)
       }
       else
       {
+        // compare the new screenshot
         const img1 = PNG.sync.read(await page.screenshot({}));
+
+        // with the old screenshot
         const img2 = PNG.sync.read(await readFile(screenshotPath));
   
         const diff = new PNG({ width: img1.width, height: img1.height });
   
         const mismatch = pixelmatch(img1.data, img2.data, diff.data, img1.width, img1.height);
   
+        // throw error if they don't match each other
         if (mismatch > 0)
           throw new MismatchError(`Error: Mismatched ${mismatch} pixels`, PNG.sync.write(diff));
   

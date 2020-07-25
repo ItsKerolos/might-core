@@ -1,20 +1,41 @@
 /**
-* @param { import('./runner.js').Step } step
+* @typedef { object } Step
+* @property {
+   'wait' |
+   'select' |
+   'hover' |
+   'click' |
+   'type'
+  } action
+* @property { any } value
 */
-export function serializeStep(step)
+
+/**
+* @param { Step } step
+*/
+function serializeStep(step)
 {
-  if (step.action === 'wait')
+  if (step.action === 'wait' && typeof step.value === 'number')
     return `Wait ${step.value}s`;
+  
+  else if (step.action === 'wait')
+    return `Wait For ${step.value}`;
+
   else if (step.action === 'select')
     return `Select ${step.value}`;
+  
+  else if (step.action === 'hover')
+    return 'Hover';
+
   else if (step.action === 'click')
     return 'Click';
+    
   else if (step.action === 'type')
     return `Type ${step.value}`;
 }
 
 /**
-* @param { import('./runner.js').Step[] } steps
+* @param { Step[] } steps
 */
 export function stepsToString(steps, separator)
 {
