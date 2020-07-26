@@ -38,6 +38,7 @@ class MismatchError extends Error
 *
 * @param { {
   url: string,
+  viewport: { width: number, height: number },
   map: Map,
   update: boolean,
   target: string[],
@@ -53,6 +54,11 @@ export async function runner(options, callback)
   options.dir = options.dir || join(__dirname, '../__might__');
 
   options.stepTimeout = options.stepTimeout || 15000;
+
+  options.viewport = options.viewport || {};
+
+  options.viewport.width = options.viewport.width || 1366;
+  options.viewport.height = options.viewport.height || 768;
 
   let map = options.map;
 
@@ -105,10 +111,7 @@ export async function runner(options, callback)
   // launch puppeteer
   const browser = await puppeteer.launch({
     timeout: options.stepTimeout,
-    // TODO allow controlling the viewport
-    // map's default should be set here while
-    // every test can have its own viewport
-    defaultViewport: { width: 1366, height: 768 },
+    defaultViewport: { width: options.viewport.width, height: options.viewport.height },
     args: [ '--no-sandbox', '--disable-setuid-sandbox' ]
   });
 
@@ -138,6 +141,15 @@ export async function runner(options, callback)
           await page.waitForSelector(step.value, {
             timeout: options.stepTimeout
           });
+      }
+      else if  (step.action === 'viewport')
+      {
+        const [ width, height ] = step.value.split('x');
+
+        await page.setViewport({
+          width: parseInt(width),
+          height: parseInt(height)
+        });
       }
       else if  (step.action === 'select')
       {

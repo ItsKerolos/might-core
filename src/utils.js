@@ -2,6 +2,7 @@
 * @typedef { object } Step
 * @property {
    'wait' |
+   'viewport' |
    'select' |
    'hover' |
    'click' |
@@ -20,6 +21,9 @@ function serializeStep(step)
   
   else if (step.action === 'wait')
     return `Wait For ${step.value}`;
+
+  else if (step.action === 'viewport')
+    return `Viewport ${step.value}`;
 
   else if (step.action === 'select')
     return `Select ${step.value}`;
