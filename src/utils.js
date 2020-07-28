@@ -11,10 +11,19 @@
 * @property { any } value
 */
 
+export const actions = [
+  'wait',
+  'viewport',
+  'select',
+  'hover',
+  'click',
+  'type'
+];
+
 /**
 * @param { Step } step
 */
-function serializeStep(step)
+export function serializeStep(step)
 {
   if (step.action === 'wait' && typeof step.value === 'number')
     return `Wait ${step.value}s`;
@@ -46,9 +55,4 @@ export function stepsToString(steps, separator)
   separator = separator || ' 🠮 ';
 
   return steps.map(serializeStep).join(separator);
-}
-
-export function wait(seconds)
-{
-  return new Promise((resolve) => setTimeout(resolve, seconds * 1000));
 }

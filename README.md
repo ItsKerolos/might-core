@@ -5,4 +5,4 @@
 `npm install --save-dev might-core`
 
 ## Usage
-This was made to be used only by [might-cli](https://github.com/ItsKerolos/might-cli) and not publicly, however the code is documented with jsdoc and very easy to use if needed.
+This was made to be used only by [might-cli](https://github.com/ItsKerolos/might-cli) & [might-ui](https://github.com/ItsKerolos/Might) and not publicly, however the code is documented with jsdoc and very easy to use if needed.
