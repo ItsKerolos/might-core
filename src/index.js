@@ -49,6 +49,7 @@ export function serializeStep(step)
 
 /**
 * @param { Step[] } steps
+* @param { string } separator
 */
 export function stepsToString(steps, separator)
 {
