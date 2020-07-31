@@ -3,6 +3,7 @@
 * @property {
    'wait' |
    'viewport' |
+   'media' |
    'select' |
    'hover' |
    'click' |
@@ -15,6 +16,7 @@
 export const actions = [
   'wait',
   'viewport',
+  'media',
   'select',
   'hover',
   'click',
@@ -35,6 +37,13 @@ export function serializeStep(step)
 
   else if (step.action === 'viewport')
     return `Viewport ${step.value}`;
+
+  else if (step.action === 'media')
+  {
+    const [ , value ] = step.value.split(':');
+
+    return `Media ${value.trim()}`;
+  }
 
   else if (step.action === 'select')
     return `Select ${step.value}`;
