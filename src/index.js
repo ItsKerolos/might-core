@@ -6,6 +6,7 @@
    'select' |
    'hover' |
    'click' |
+   'keyboard' |
    'type'
   } action
 * @property { any } value
@@ -17,6 +18,7 @@ export const actions = [
   'select',
   'hover',
   'click',
+  'keyboard',
   'type'
 ];
 
@@ -42,9 +44,14 @@ export function serializeStep(step)
 
   else if (step.action === 'click')
     return 'Click';
+
+  else if (step.action === 'keyboard')
+    return `Keyboard ${step.value}`;
     
   else if (step.action === 'type')
     return `Type ${step.value}`;
+
+  else return undefined;
 }
 
 /**
@@ -55,5 +62,8 @@ export function stepsToString(steps, separator)
 {
   separator = separator || ' 🠮 ';
 
-  return steps.map(serializeStep).join(separator);
+  return steps
+    .map(serializeStep)
+    .filter(s => s !== undefined)
+    .join(separator);
 }
