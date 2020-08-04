@@ -78,7 +78,7 @@ function serialize(step, pretty)
     let output;
 
     if (pretty)
-      output = '';
+      output = `${x1}, ${y1}`;
     else
       output = `${x1} ${y1}`;
 
