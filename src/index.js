@@ -3,6 +3,7 @@
 * @property {
    'wait' |
    'viewport' |
+   'goto' |
    'media' |
    'select' |
    'hover' |
@@ -15,9 +16,16 @@
 * @property { any } value
 */
 
+/**
+* @typedef { object } Options
+* @property { boolean } pretty
+* @property { string } url
+*/
+
 export const actions = [
   'wait',
   'viewport',
+  'goto',
   'media',
   'select',
   'hover',
@@ -30,59 +38,65 @@ export const actions = [
 
 /**
 * @param { Step } step
-* @param { boolean } pretty
+* @param { Options } opt
 */
-function serialize(step, pretty)
+function stringify(step, opt)
 {
   /**
   * @param { string } s
   */
-  const cs = (s, pretty) => pretty ? s : s.toLowerCase();
+  const cs = (s) => (opt?.pretty) ? s : s.toLowerCase();
 
   if (step.action === 'wait' && typeof step.value === 'number')
-    return `${cs('Wait', pretty)} ${step.value}s`;
+    return `${cs('Wait')} ${step.value}s`;
   
   else if (step.action === 'wait')
-    return `${cs('Wait For', pretty)} ${step.value}`;
+    return `${cs('Wait For')} ${step.value}`;
 
   else if (step.action === 'viewport')
-    return `${cs('Viewport', pretty)} ${step.value}`;
+    return `${cs('Viewport')} ${step.value}`;
+
+  else if (step.action === 'goto')
+  {
+    let url = step.value;
+
+    if (opt?.pretty)
+    {
+      if (opt?.url)
+        url = url.replace(opt.url, '');
+
+      if (url.endsWith('/'))
+        url = url.substring(0, url.length - 1);
+    }
+
+    return `${cs('Goto')} ${url}`;
+  }
 
   else if (step.action === 'media')
   {
     const [ name, value ] = step.value.split(':');
 
-    let output;
+    const output = (opt?.pretty) ? value : `${name} ${value}`;
 
-    if (pretty)
-      output = value;
-    else
-      output = `${name} ${value}`;
-
-    return `${cs('Media', pretty)} ${output}`;
+    return `${cs('Media')} ${output}`;
   }
 
   else if (step.action === 'select')
-    return `${cs('Select', pretty)} ${step.value}`;
+    return `${cs('Select')} ${step.value}`;
   
   else if (step.action === 'hover')
-    return `${cs('Hover', pretty)}`;
+    return `${cs('Hover')}`;
 
   else if (step.action === 'click')
-    return `${cs('Click', pretty)}`;
+    return `${cs('Click')}`;
 
   else if (step.action === 'drag')
   {
     const [ x1, y1 ] = step.value;
 
-    let output;
+    const output = (opt?.pretty) ? `${x1}, ${y1}` : `${x1} ${y1}`;
 
-    if (pretty)
-      output = `${x1}, ${y1}`;
-    else
-      output = `${x1} ${y1}`;
-
-    return `${cs('Drag', pretty)} ${output}`;
+    return `${cs('Drag')} ${output}`;
   }
 
   else if (step.action === 'swipe')
@@ -91,7 +105,7 @@ function serialize(step, pretty)
 
     let output;
 
-    if (pretty)
+    if (opt?.pretty)
     {
       x0 = parseInt(x0);
       x1 = parseInt(x1);
@@ -117,35 +131,37 @@ function serialize(step, pretty)
       output = `${x0} ${y0} ${x1} ${y1}`;
     }
 
-    return `${cs('Swipe', pretty)} ${output}`;
+    return `${cs('Swipe')} ${output}`;
   }
 
   else if (step.action === 'keyboard')
-    return `${cs('Keyboard', pretty)} ${step.value}`;
+    return `${cs('Keyboard')} ${step.value}`;
     
   else if (step.action === 'type')
-    return `${cs('Type', pretty)} ${step.value}`;
+    return `${cs('Type')} ${step.value}`;
 
   else return undefined;
 }
 
 /**
 * @param { Step } step
-* @param { boolean } pretty
+* @param { Options } opt
 */
-export function serializeStep(step, pretty)
+export function stringifyStep(step, opt)
 {
-  return serialize(step, pretty).replace(/\s+/, ' ').trim();
+  const s = stringify(step, opt);
+
+  return (opt?.pretty) ? s.replace(/\s+/g, ' ').trim() : s;
 }
 
 /**
 * @param { Step[] } steps
-* @param { boolean } pretty
+* @param { Options } opt
 */
-export function stepsToString(steps, pretty)
+export function stepsToString(steps, opt)
 {
   return steps
-    .map(i => serializeStep(i, pretty))
+    .map(i => stringifyStep(i, opt))
     .filter(s => s !== undefined)
-    .join(pretty ? ' 🠮 ' : '_');
+    .join((opt?.pretty) ? ' 🠮 ' : '_');
 }
