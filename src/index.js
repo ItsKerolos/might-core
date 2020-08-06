@@ -56,6 +56,12 @@ function stringify(step, opt)
   else if (step.action === 'viewport')
     return `${cs('Viewport')} ${step.value}`;
 
+  else if (step.action === 'goto' && step.value === 'back')
+    return `${cs('Go')} Back`;
+    
+  else if (step.action === 'goto' && step.value === 'forward')
+    return `${cs('Go')} Forward`;
+    
   else if (step.action === 'goto')
   {
     let url = step.value;
