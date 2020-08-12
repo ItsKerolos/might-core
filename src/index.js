@@ -54,7 +54,12 @@ function stringify(step, opt)
     return `${cs('Wait For')} ${step.value}`;
 
   else if (step.action === 'viewport')
-    return `${cs('Viewport')} ${step.value}`;
+  {
+    if (!step.value)
+      return `${cs('Reset Viewport')}`;
+    else
+      return `${cs('Viewport')} ${step.value}`;
+  }
 
   else if (step.action === 'goto' && step.value === 'back')
     return `${cs('Go')} Back`;
