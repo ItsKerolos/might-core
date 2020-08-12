@@ -5,7 +5,7 @@
   "main": "build/index.js",
   "scripts": {
     "prepare": "npm run build",
-    "postpublish": "npm version patch --no-git",
+    "prepublishOnly": "npm version patch",
     "build": "rm -rf ./build && mkdir ./build && babel -d ./build ./src",
     "watch": "rm -rf ./build && mkdir ./build && babel -d ./build src -s --watch"
   },

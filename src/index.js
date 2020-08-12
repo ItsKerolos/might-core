@@ -94,7 +94,14 @@ function stringify(step, opt)
     return `${cs('Hover')}`;
 
   else if (step.action === 'click')
-    return `${cs('Click')}`;
+  {
+    if (step.value === 'right')
+      return `${cs('Right Click')}`;
+    else if (step.value === 'middle')
+      return `${cs('Middle Click')}`;
+    else
+      return `${cs('Click')}`;
+  }
 
   else if (step.action === 'drag')
   {
