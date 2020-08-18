@@ -121,7 +121,7 @@ function stringify(step, opt)
   {
     let [ x0, y0, x1, y1 ] = step.value;
 
-    let output;
+    let output = 'nowhere';
 
     if (opt?.pretty)
     {
