@@ -1,6 +1,6 @@
 {
   "name": "might-core",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "description": "A set of functions and variables shared between might-related packages",
   "main": "build/index.js",
   "scripts": {
