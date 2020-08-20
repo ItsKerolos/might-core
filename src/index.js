@@ -121,7 +121,7 @@ function stringify(step, opt)
   {
     let [ x0, y0, x1, y1 ] = step.value;
 
-    let output = 'nowhere';
+    let output;
 
     if (opt?.pretty)
     {
@@ -143,6 +143,9 @@ function stringify(step, opt)
         output = output ? `Upper ${output}` : 'Up';
       else if (yDiff < 0)
         output = output ? `Lower ${output}` : 'Down';
+
+      if (!output)
+        output = 'nowhere';
     }
     else
     {
