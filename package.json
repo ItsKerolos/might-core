@@ -9,16 +9,8 @@
     "build": "rm -rf ./build && mkdir ./build && babel -d ./build ./src",
     "watch": "rm -rf ./build && mkdir ./build && babel -d ./build src -s --watch"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ItsKerolos/might-core.git"
-  },
   "author": "Kerolos Zaki",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ItsKerolos/might-core/issues"
-  },
-  "homepage": "https://github.com/ItsKerolos/might-core#readme",
   "dependencies": {},
   "devDependencies": {
     "@babel/cli": "^7.10.5",
