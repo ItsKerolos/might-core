@@ -1,23 +1,25 @@
 {
   "name": "might-core",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "description": "A set of functions and variables shared between might-related packages",
   "main": "build/index.js",
   "scripts": {
     "prepare": "npm run build",
-    "prepublishOnly": "npm version patch",
     "build": "rm -rf ./build && mkdir ./build && babel -d ./build ./src",
     "watch": "rm -rf ./build && mkdir ./build && babel -d ./build src -s --watch"
+  },
+  "engines": {
+    "node": ">=12"
   },
   "author": "Kerolos Zaki",
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
-    "@babel/cli": "^7.10.5",
-    "@babel/core": "^7.10.5",
-    "@babel/preset-env": "^7.10.4",
+    "@babel/cli": "^7.11.6",
+    "@babel/core": "^7.11.6",
+    "@babel/preset-env": "^7.11.5",
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.5.0",
+    "eslint": "^7.10.0",
     "eslint-plugin-security": "^1.4.0"
   }
 }
