@@ -1,12 +1,13 @@
 {
   "name": "might-core",
-  "version": "0.3.8",
+  "version": "1.0.0",
   "description": "A set of functions and variables shared between might-related packages",
   "main": "build/index.js",
+  "types": "build/index.d.js",
   "scripts": {
     "prepare": "npm run build",
-    "build": "rm -rf ./build && mkdir ./build && babel -d ./build ./src",
-    "watch": "rm -rf ./build && mkdir ./build && babel -d ./build src -s --watch"
+    "build": "npx tsc --module commonjs --target ES2019 --lib ES2019 -d --removeComments src/*.ts --outDir build",
+    "watch": "npx tsc --module commonjs --target ES2019 --lib ES2019 -d -w src/*.ts --outDir build"
   },
   "engines": {
     "node": ">=12"
@@ -15,11 +16,10 @@
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
-    "@babel/cli": "^7.12.10",
-    "@babel/core": "^7.12.10",
-    "@babel/preset-env": "^7.12.11",
-    "babel-eslint": "^10.1.0",
+    "@typescript-eslint/eslint-plugin": "^4.15.0",
+    "@typescript-eslint/parser": "^4.15.0",
     "eslint": "^7.18.0",
-    "eslint-plugin-security": "^1.4.0"
+    "eslint-plugin-security": "^1.4.0",
+    "typescript": "^4.1.5"
   }
 }

@@ -1,26 +1,22 @@
-/**
-* @typedef { object } Step
-* @property {
-   'wait' |
-   'viewport' |
-   'goto' |
-   'media' |
-   'select' |
-   'hover' |
-   'click' |
-   'drag' |
-   'swipe' |
-   'keyboard' |
-   'type'
-  } action
-* @property { any } value
-*/
+type Step = {
+  action: 'wait' |
+  'viewport' |
+  'goto' |
+  'media' |
+  'select' |
+  'hover' |
+  'click' |
+  'drag' |
+  'swipe' |
+  'keyboard' |
+  'type';
+  value: any;
+};
 
-/**
-* @typedef { object } Options
-* @property { boolean } pretty
-* @property { string } url
-*/
+type Options = {
+  pretty: boolean,
+  url: string 
+}
 
 export const actions = [
   'wait',
@@ -36,16 +32,9 @@ export const actions = [
   'type'
 ];
 
-/**
-* @param { Step } step
-* @param { Options } opt
-*/
-function stringify(step, opt)
+function stringify(step: Step, opt: Options)
 {
-  /**
-  * @param { string } s
-  */
-  const cs = (s) => (opt?.pretty) ? s : s.toLowerCase();
+  const cs = (s: string) => (opt?.pretty) ? s : s.toLowerCase();
 
   if (step.action === 'wait' && typeof step.value === 'number')
     return `${cs('Wait')} ${step.value}s`;
@@ -121,7 +110,7 @@ function stringify(step, opt)
   {
     let [ x0, y0, x1, y1 ] = step.value;
 
-    let output;
+    let output: string;
 
     if (opt?.pretty)
     {
@@ -164,22 +153,14 @@ function stringify(step, opt)
   else return undefined;
 }
 
-/**
-* @param { Step } step
-* @param { Options } opt
-*/
-export function stringifyStep(step, opt)
+export function stringifyStep(step: Step, opt: Options)
 {
   const s = stringify(step, opt);
 
   return (opt?.pretty) ? s.replace(/\s+/g, ' ').trim() : s;
 }
 
-/**
-* @param { Step[] } steps
-* @param { Options } opt
-*/
-export function stepsToString(steps, opt)
+export function stepsToString(steps: Step[], opt: Options)
 {
   return steps
     .map(i => stringifyStep(i, opt))
