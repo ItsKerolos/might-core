@@ -14,8 +14,8 @@ export type Step = {
 };
 
 type Options = {
-  pretty: boolean,
-  url: string 
+  pretty?: boolean,
+  url?: string 
 }
 
 export const actions = [
@@ -32,7 +32,7 @@ export const actions = [
   'type'
 ];
 
-function stringify(step: Step, opt: Options)
+function stringify(step: Step, opt?: Options)
 {
   const cs = (s: string) => (opt?.pretty) ? s : s.toLowerCase();
 
@@ -153,14 +153,14 @@ function stringify(step: Step, opt: Options)
   else return undefined;
 }
 
-export function stringifyStep(step: Step, opt: Options)
+export function stringifyStep(step: Step, opt?: Options)
 {
   const s = stringify(step, opt);
 
   return (opt?.pretty) ? s.replace(/\s+/g, ' ').trim() : s;
 }
 
-export function stepsToString(steps: Step[], opt: Options)
+export function stepsToString(steps: Step[], opt?: Options)
 {
   return steps
     .map(i => stringifyStep(i, opt))
