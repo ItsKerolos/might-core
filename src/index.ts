@@ -1,4 +1,4 @@
-type Step = {
+export type Step = {
   action: 'wait' |
   'viewport' |
   'goto' |
